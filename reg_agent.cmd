@@ -8,7 +8,7 @@ SET parent=%~dp0
 ::script must run as admin
 ::this script is used to register a new vm with a new agent, it does not rebuild a guiid, so it cannot be used on a cloned vm would was previously regiostered
 @echo Setting up Acronis Agent. Please don't close this window, it should take a few seconds
-@echo credential : if you want to register to acronis, create a token and enter url and token in %parent%token.txt
+@echo credential : if you want to register to acronis, create a token and enter url and token in %parent%work\token.txt
 ::HOSTNAME
 ::Call %parent%\hostname.cmd not ready yet
 
@@ -57,7 +57,7 @@ goto newid
 
     ::this script is used to register a new vm with a new agent, it does not rebuild a guiid, so it cannot be used on a cloned vm would was previously regiostered
     @echo Setting up powershell and creating fresh ID
-    powershell.exe -ExecutionPolicy Bypass %parent%\newguid.ps1 
+    powershell.exe -ExecutionPolicy Bypass %parent%work\newguid.ps1 
 
         ::parsing guid
    
@@ -91,7 +91,7 @@ set /p register=final step to add the agent to acronis cloud, credentials and cl
 if /i "%register%" == "n" goto commonexit
 if /i "%register%" == "y" (
     
-  call %parent%\register.cmd
+  call %parent%work\register.cmd
 
 )
 :unregister
