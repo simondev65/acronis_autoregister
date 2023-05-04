@@ -8,7 +8,7 @@ SET parent=%~dp0
 ::script must run as admin
 ::this script is used to register a new vm with a new agent, it does not rebuild a guiid, so it cannot be used on a cloned vm would was previously regiostered
 @echo Setting up Acronis Agent. Please don't close this window, it should take a few seconds
-@echo credential : if you want to register to acronis, create a token and enter url and token in %parent%\token.txt
+@echo credential : if you want to register to acronis, create a token and enter url and token in %parent%token.txt
 ::HOSTNAME
 ::Call %parent%\hostname.cmd not ready yet
 
@@ -18,17 +18,18 @@ if exist "%parent%\reg_done.txt" (
     @echo this agent is already registered
 
 	start "" "C:\Program Files\BackupClient\TrayMonitor\MmsMonitor.exe"
+    goto 1
    
     )
     if not exist "c:\register_agent\reg_done.txt"(
         @echo this agent is not registered yet
-        
+        goto 1
     )
-    :1
-         
-        set /p Input=**press 1 to create a new registration ID and register again **^ press 2 to unregister this machine^ press any other key to exit:
+    
+:1
+set /p Input=press 1 to create a new registration ID and register again  press 2 to unregister this machine press any other key to exit:
 
-:3
+
 
 ::direction following answers
 if /i "%Input%" == "1" goto yes
@@ -86,7 +87,7 @@ timeout /T 1 > nul
 goto TRY
 
 :FOUND
-set /p register=final step to add the agent to acronis cloud, credentials must be in the file, Do you want to register y/n:
+set /p register=final step to add the agent to acronis cloud, credentials and cloud url must be in the token.txt file, Do you want to register y/n:
 if /i "%register%" == "n" goto commonexit
 if /i "%register%" == "y" (
     
@@ -95,7 +96,7 @@ if /i "%register%" == "y" (
 )
 :unregister
 start "" "%ProgramFiles%\BackupClient\RegisterAgentTool\register_agent.exe" -o unregister
-@echo agen unregistered 
+@echo agent unregistered 
 
 :commonexit
 PAUSE
