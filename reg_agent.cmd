@@ -57,8 +57,8 @@ goto newid
 
         ::parsing guid
    
-        set /p guid1=< guid1.txt 
-        set /p guid2=< guid2.txt 
+        set /p guid1=< %parent%work\guid1.txt 
+        set /p guid2=< %parent%work\guid2.txt 
         @echo new id are %guid1% and %guid2% registering now
         acropsh "C:\Program Files\BackupClient\PyShell\site-tools\change_machine_id.py" -m %guid1% -i %guid2% > %parent%\change_ids.log
    
