@@ -1,5 +1,4 @@
 
-::change username in script
 ::answer no doesnt stop script
 @echo off
 SETLOCAL ENABLEEXTENSIONS
@@ -19,34 +18,29 @@ if exist "%parent%\reg_done.txt" (
     @echo this agent is already registered
 
 	start "" "C:\Program Files\BackupClient\TrayMonitor\MmsMonitor.exe"
-    goto 1
+   
     )
     if not exist "c:\register_agent\reg_done.txt"(
         @echo this agent is not registered yet
-        goto 2
+        
     )
     :1
          
-        set /p Input=Do you need to create a new ID and register again ?Enter y or n:
-        goto 3
-    :2
-        set /p Input2=Do you want to  register for the first time ?Enter y or n:
+        set /p Input=**press 1 to create a new registration ID and register again **^ press 2 to unregister this machine^ press any other key to exit:
+
 :3
 
 ::direction following answers
-if /i "%Input%" == "y" goto yes
+if /i "%Input%" == "1" goto yes
+if /i "%Input%" == "2" goto unregister
 if /i "%Input%" == "n" goto commonexit
-if /i "%Input2%" == "y" goto registernew
-if /i "%Input2%" == "n" goto commonexit
+
 echo Not found.
 goto commonexit
 
 :yes
-@echo Hostname used for registration in acronis cloud is %COMPUTERNAME%
-set /p name=are you sure the hostname does not exist yet on the acronis tenant ? if unsure, answer no, change the hostname and come back to this script.Enter y or n:
-if /i "%name%" == "y" goto newid
-if /i "%name%" == "n" goto commonexit
-goto commonexit
+@echo Hostname used for registration in acronis cloud is %COMPUTERNAME% *** IF you want to change the hostname you can change it afterwards in windows settings***
+goto newid
 
 
 
@@ -99,5 +93,9 @@ if /i "%register%" == "y" (
   call %parent%\register.cmd
 
 )
+:unregister
+start "" "%ProgramFiles%\BackupClient\RegisterAgentTool\register_agent.exe" -o unregister
+@echo agen unregistered 
+
 :commonexit
- EXIT
+PAUSE
