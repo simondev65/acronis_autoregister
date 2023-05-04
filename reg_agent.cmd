@@ -9,25 +9,21 @@ SET parent=%~dp0
 ::this script is used to register a new vm with a new agent, it does not rebuild a guiid, so it cannot be used on a cloned vm would was previously regiostered
 @echo Setting up Acronis Agent. Please don't close this window, it should take a few seconds
 @echo credential : if you want to register to acronis, create a token and enter url and token in %parent%work\token.txt
-::HOSTNAME
-::Call %parent%\hostname.cmd not ready yet
+
 
 
 
 if exist "%parent%\reg_done.txt" (
-    @echo this agent is already registered
-
+    @echo this script has already run, so agent is probably already registered, create new ID to re-register by pressing 1
 	start "" "C:\Program Files\BackupClient\TrayMonitor\MmsMonitor.exe"
     goto 1
-   
-    )
-    if not exist "c:\register_agent\reg_done.txt"(
-        @echo this agent is not registered yet
-        goto 1
-    )
+) else (
+    @echo this script has not run yet, so agent is probably not registered yet 
+    goto 1
+)
     
 :1
-set /p Input=press 1 to create a new registration ID and register again  press 2 to unregister this machine press any other key to exit:
+set /p Input=press 1 to create a new registration ID and register again ^ press 2 to unregister ^this machine press any other key to exit:
 
 
 
