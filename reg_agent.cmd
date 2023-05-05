@@ -1,5 +1,7 @@
 
-::answer no doesnt stop script
+::update the script at https://github.com/simondev65/acronis_autoregister
+
+
 @echo off
 SETLOCAL ENABLEEXTENSIONS
 SET me=%~n0
@@ -42,7 +44,6 @@ goto newid
 
 
 :newid
-::note : may need to unregister "%ProgramFiles%\BackupClient\RegisterAgentTool\register_agent.exe" -o unregister
 
 
 ::@echo Step 1 of 4 - Preparing the credentials ...
