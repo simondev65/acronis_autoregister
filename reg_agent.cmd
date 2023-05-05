@@ -10,7 +10,7 @@ SET parent=%~dp0
 ::script must run as admin
 ::this script is used to register a new vm with a new agent, it does not rebuild a guiid, so it cannot be used on a cloned vm would was previously regiostered
 @echo Setting up Acronis Agent. Please don't close this window, it should take a few seconds
-@echo credential : if you want to register to acronis, create a token and enter url and token in %parent%work\token.txt
+@echo credential : if you want to register to acronis, create a token and enter url and token in %parent%\token.txt
 
 
 
