@@ -1,5 +1,5 @@
 ******ACRONIS cyber protect cloud  registering tool for cloned VM*****
-This Script intends to solve a common use case : being able to clone a vm (with Acronis already installed and registered) and register both the original and cloned with acronis.
+This Script intends to solve a common use case : being able to clone a vm (with Acronis already installed and registered) and register both the original and cloned with acronis as different machines.
 
 
 How to use the script : 
