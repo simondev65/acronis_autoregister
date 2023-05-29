@@ -54,12 +54,12 @@ goto newid
 
     ::this script is used to register a new vm with a new agent, it does not rebuild a guiid, so it cannot be used on a cloned vm would was previously regiostered
     @echo Setting up powershell and creating fresh ID
-    powershell.exe -ExecutionPolicy Bypass "%parent%\newguid.ps1" 
+    powershell.exe -ExecutionPolicy Bypass %parent%newguid.ps1
 
         ::parsing guid
    
-        set /p guid1=< "%parent%\guid1.txt" 
-        set /p guid2=< "%parent%\guid2.txt" 
+        set /p guid1=< %parent%guid1.txt 
+        set /p guid2=< %parent%guid2.txt 
         @echo new id are %guid1% and %guid2% registering now
         acropsh "C:\Program Files\BackupClient\PyShell\site-tools\change_machine_id.py" -m %guid1% -i %guid2% > "%parent%\change_ids.log"
    
