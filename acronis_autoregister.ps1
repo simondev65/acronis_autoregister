@@ -37,6 +37,7 @@ Function Get-newuuid {
     try{
         $string="acropsh C:\Program Files\BackupClient\PyShell\site-tools\change_machine_id.py -m $uuid1 -i $uuid2"
         Invoke-Expression -Command $string
+        Write-Host "new UUID created, now need to register online"
     }
     catch {
         Write-Host "An uuid error occurred:"
@@ -45,6 +46,7 @@ Function Get-newuuid {
         Write-Host "command is : " $string
         $result="change UUID Error"
     }
+    #now add wait for port , then read token.txt, then register
     return ,$myArray
     
 
