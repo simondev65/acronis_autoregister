@@ -19,12 +19,15 @@ Function Get-ProjectType {
     3 - exit
     Please choose"
     Switch ($type){
-        1 {$choice=Get-unregister}
+        1 {echo 'here';$choice=Get-a}
         2 {$choice=Get-newuuid}
         3 {break}
         Default{break}
     }
     return $choice
+}
+Function get-a{
+    return 'toto'
 }
 Function Get-unregister{
     try{
