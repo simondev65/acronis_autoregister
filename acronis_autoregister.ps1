@@ -118,6 +118,7 @@ write-output '*** IF you want to change the hostname you can change it afterward
 $choice=""
 $projectType=Get-ProjectType
 write-output $projectType
+Read-Host -Prompt "Press Enter to exit"
 break
 
 
