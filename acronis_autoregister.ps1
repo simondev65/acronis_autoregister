@@ -1,4 +1,4 @@
- 
+  
 Function Get-ProjectType {
     $type=Read-Host "
     1 - unregister Acronis agent
@@ -92,14 +92,24 @@ Function Get-newuuid {
         $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
         $exe = $exe -replace ' ','` '
         $exe="$exe -o register -t cloud -a $url --token $token"
-        Invoke-Expression -Command $sexe
-        Write-Host "**registration finished.** Starting acronis process..."
+        Write-Host "**registration start :" $exe
+        Invoke-Expression -Command $exe
+        Write-Host "**registration finished.**"
+        
+    }
+    catch {
+        Write-Host "***error*** : A registration error occurred:"
+        Write-Host $_
+        break
+    }
+    try{
+        write-output "Starting acronis process..."
         $exe="$Env:Programfiles\BackupClient\TrayMonitor\MmsMonitor.exe"
         $exe = $exe -replace ' ','` '
         Start-Process -FilePath $exe
-    }
+        }
     catch {
-        Write-Host "An registration error occurred:"
+        Write-Host "An acronis starting service  error occurred:"
         Write-Host $_
         break
     }
@@ -147,15 +157,33 @@ $mypath = $MyInvocation.MyCommand.Path
 $path= Split-Path $mypath -Parent
 
 $h=hostname
+$exe="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
+$exe = $exe -replace ' ','` '
+$exe="$exe -m dmldump -s mms -vs Msp::Agent::Dto::Configuration"
+$r=Invoke-Expression -Command $exe
 
+$tenant = $r[8] -replace "^.*?string',\s'(.*)'\),", '$1'
+$cloud = $r[42] -replace "^.*?string',\s'(.*)'\),", '$1'
+write-output "latest script on https://github.com/simondev65/acronis_autoregister"
+write-output ""
+if (!$tenant){
+write-output "Acronis not registered yet"
+  
+}else{ 
+
+
+
+write-output "****this Agent is registered to management $cloud  in the tenant $tenant" 
+} 
+write-output ""
 write-output "Setting up Acronis Agent. Please dont close this window, it should take a few seconds"
-write-output 'credential if you want to register to acronis, create a token and enter url and token in %parent%\token.txt'
+write-output 'credential if you want to register to acronis, fill token.txt in $path'
 
 write-output 'FYI your computername is:' $h
 write-output '*** IF you want to change the hostname you can change it afterwards in windows settings***'
 $choice=""
 $projectType=Get-ProjectType
-write-output $projectType
+#write-output $projectType
 Read-Host -Prompt "Press Enter to exit"
 break
 
@@ -164,4 +192,4 @@ break
 
 
  
-
+ 
