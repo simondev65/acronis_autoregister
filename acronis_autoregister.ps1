@@ -58,7 +58,7 @@ Function Get-newuuid {
     $wait=1
     while ($wait -eq 1){
         try{
-         $tcp=get-nettcpconnection -State Listen -LocalPort 43234
+         $tcp=get-nettcpconnection -State Listen -LocalPort 43234 -ErrorAction SilentlyContinue
         }
         catch{
         Write-Host "Acronis service not started"
@@ -164,3 +164,4 @@ break
 
 
  
+
