@@ -1,4 +1,4 @@
-
+ 
 Function Get-ProjectType {
     $type=Read-Host "
     1 - unregister Acronis agent
@@ -32,6 +32,7 @@ Function Get-unregister{
 
 
 Function Get-newuuid {
+    Write-Host "Be patient, this might take a few minutes"
     $myArray = @()
     $uuid1=(new-guid).guid
     $myArray +=  $uuid1
@@ -76,7 +77,7 @@ Function Get-newuuid {
     }
 #read token from file
     try{
-        $read=Get-Content .\token.txt| ConvertFrom-Stringdata
+        $read=Get-Content $path\token.txt| ConvertFrom-Stringdata
         $url=$read.values[0]
         $token=$read.values[1]
         Write-Output 'url: ' $url 'token:' $token
@@ -103,12 +104,47 @@ Function Get-newuuid {
         break
     }
    
-    #now add wait for port , then read token.txt, then register
+
     return $result
     
 
 }
+Function Check-RunAsAdministrator()
+{
+  #Get current user context
+  $CurrentUser = New-Object Security.Principal.WindowsPrincipal $([Security.Principal.WindowsIdentity]::GetCurrent())
+  
+  #Check user is running the script is member of Administrator Group
+  if($CurrentUser.IsInRole([Security.Principal.WindowsBuiltinRole]::Administrator))
+  {
+       Write-host "Script is running with Administrator privileges!"
+  }
+  else
+    {
+       #Create a new Elevated process to Start PowerShell
+       $ElevatedProcess = New-Object System.Diagnostics.ProcessStartInfo "PowerShell";
+ 
+       # Specify the current script path and name as a parameter
+       $ElevatedProcess.Arguments = "& '" + $script:MyInvocation.MyCommand.Path + "'"
+ 
+       #Set the Process to elevated
+       $ElevatedProcess.Verb = "runas"
+ 
+       #Start the new elevated process
+       [System.Diagnostics.Process]::Start($ElevatedProcess)
+ 
+       #Exit from the current, unelevated, process
+       Exit
+ 
+    }
+}
+ 
+#Check Script is running with Elevated Privileges
+Check-RunAsAdministrator
 
+
+$mypath = $MyInvocation.MyCommand.Path
+$path= Split-Path $mypath -Parent
 
 $h=hostname
 
@@ -127,4 +163,4 @@ break
 
 
 
-
+ 
