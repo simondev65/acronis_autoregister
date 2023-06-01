@@ -16,7 +16,10 @@ Function Get-ProjectType {
 
 Function Get-unregister{
     try{
-        Invoke-Expression -Command "$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe -o unregister"
+        $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
+        $exe = $exe -replace ' ','` '
+        $exe="$exe -o unregister"
+        Invoke-Expression -Command $exe
         $result="unregister success"
     }
     catch {
@@ -35,8 +38,10 @@ Function Get-newuuid {
     $uuid2=(new-guid).guid
     $myArray +=  $uuid2
     try{
-        $string="acropsh C:\Program Files\BackupClient\PyShell\site-tools\change_machine_id.py -m $uuid1 -i $uuid2"
-        Invoke-Expression -Command $string
+        $exe="acropsh C:\Program Files\BackupClient\PyShell\site-tools\change_machine_id.py"
+        $exe = $exe -replace ' ','` '
+        $exe="$exe -m $uuid1 -i $uuid2"
+        Invoke-Expression -Command $exe
         Write-Host "new UUID created, with number:" $myArray
     }
     catch {
@@ -81,10 +86,14 @@ Function Get-newuuid {
     }
     #register
     try{
-        $string="c:\Program Files\BackupClient\RegisterAgentTool\register_agent.exe -o register -t cloud -a $url --token $token"
-        Invoke-Expression -Command $string
+        $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
+        $exe = $exe -replace ' ','` '
+        $exe="$exe -o register -t cloud -a $url --token $token"
+        Invoke-Expression -Command $sexe
         Write-Host "**registration finished.** Starting acronis process..."
-        Start-Process -FilePath "C:\Program Files\BackupClient\TrayMonitor\MmsMonitor.exe"
+        $exe="$Env:Programfiles\BackupClient\TrayMonitor\MmsMonitor.exe"
+        $exe = $exe -replace ' ','` '
+        Start-Process -FilePath $exe
     }
     catch {
         Write-Host "An registration error occurred:"
