@@ -38,7 +38,7 @@ Function Get-newuuid {
     $uuid2=(new-guid).guid
     $myArray +=  $uuid2
     try{
-        $exe1=$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
+        $exe1="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
         $exe2="$Env:Programfiles\BackupClient\PyShell\site-tools\change_machine_id.py"
         $exe1 = $exe1 -replace ' ','` '
         $exe2 = $exe2 -replace ' ','` '
