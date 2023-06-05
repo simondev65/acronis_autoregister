@@ -15,19 +15,25 @@ Function Get-ProjectType {
 }
 
 Function Get-unregister{
-    try{
-        $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
-        $exe = $exe -replace ' ','` '
-        $exe="$exe -o unregister"
-        Invoke-Expression -Command $exe
-        $result="unregister success"
+    $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
+    #$exe = $exe -replace ' ','` '
+    $params=@('-o', 'unregister')
+    Write-Host "**unregister start :" $exe $params
+    $nativeCmdResult =& $exe $params 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        # success handling
+        $nativeCmdResult
+        Write-Host "unregister success"
+
+    } else {
+        # error handling
+        #   even with redirecting the error stream to the success stream (above)..
+        #   $LASTEXITCODE determines what happend if returned as not "0" (depends on application)
+        Write-Error -Message "$LASTEXITCODE - $nativeCmdResult"
     }
-    catch {
-        Write-Host "An error occurred:"
-        Write-Host $_
-        $result="unregister Error"
-    }
-    return $result
+
+return $result 
+
 }
 
 
@@ -38,22 +44,25 @@ Function Get-newuuid {
     $myArray +=  $uuid1
     $uuid2=(new-guid).guid
     $myArray +=  $uuid2
-    try{
-        $exe1="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
-        $exe2="$Env:Programfiles\BackupClient\PyShell\site-tools\change_machine_id.py"
-        $exe1 = $exe1 -replace ' ','` '
-        $exe2 = $exe2 -replace ' ','` '
-        $exe="$exe1 $exe2 -m $uuid1 -i $uuid2"
-        Invoke-Expression -Command $exe
-        Write-Host "new UUID created, with number:" $myArray
-    }
-    catch {
-        Write-Host "An uuid error occurred:"
-        Write-Host $_
-        Write-Host "command is : " $string
-        $result="change UUID Error"
+    $exe="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
+    #$exe = $exe -replace ' ','` '
+    $params=@('C:\Program files\BackupClient\PyShell\site-tools\change_machine_id.py', '-m', $uuid1, '-i', $uuid2)
+    Write-Host "** start replacing uuid :" $exe $params
+    $nativeCmdResult =& $exe $params 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        # success handling
+        $nativeCmdResult
+        Write-Host "replacing uuid success"
+
+    } else {
+        # error handling
+        #   even with redirecting the error stream to the success stream (above)..
+        #   $LASTEXITCODE determines what happend if returned as not "0" (depends on application)
+        Write-Error -Message "$LASTEXITCODE - $nativeCmdResult"
         break
-    }
+    } 
+
+   
 #wait for acronis to start
     $wait=1
     while ($wait -eq 1){
@@ -67,10 +76,11 @@ Function Get-newuuid {
         }
         if (!$tcp){
             write-host "waiting for acronis to start"
-            sleep 2
+            sleep 3
         }else{
             $wait=0
-            write-host "acronis started, continuing job"
+            write-host "acronis started, continuing job, be patient"
+            sleep 5
 
         }
     
@@ -88,25 +98,29 @@ Function Get-newuuid {
         break
     }
     #register
-    try{
-        $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
-        $exe = $exe -replace ' ','` '
-        $exe="$exe -o register -t cloud -a $url --token $token"
-        Write-Host "**registration start :" $exe
-        Invoke-Expression -Command $exe
-        Write-Host "**registration finished.**"
-        
-    }
-    catch {
-        Write-Host "***error*** : A registration error occurred:"
-        Write-Host $_
+    $exe="$Env:Programfiles\BackupClient\RegisterAgentTool\register_agent.exe"
+    #$exe = $exe -replace ' ','` '
+    $params=@('-o', 'register', '-t', 'cloud', '-a', $url, '--token', $token)
+    Write-Host "** start registering :" $exe $params
+    $nativeCmdResult =& $exe $params 2>&1
+    if ($LASTEXITCODE -eq 0) {
+        # success handling
+        $nativeCmdResult
+        Write-Host "registration success"
+
+    } else {
+        # error handling
+        #   even with redirecting the error stream to the success stream (above)..
+        #   $LASTEXITCODE determines what happend if returned as not "0" (depends on application)
+        Write-Error -Message "$LASTEXITCODE - $nativeCmdResult"
         break
-    }
+    } 
+    
     try{
+        sleep 5
         write-host "Starting acronis process..."
         $exe="$Env:Programfiles\BackupClient\TrayMonitor\MmsMonitor.exe"
-        $exe = $exe -replace ' ','` '
-        Start-Process -FilePath $exe
+        & $exe
         }
     catch {
         Write-Host "An acronis starting service  error occurred:"
