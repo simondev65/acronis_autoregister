@@ -66,11 +66,11 @@ Function Get-newuuid {
 
         }
         if (!$tcp){
-            write-output "waiting for acronis to start"
+            write-host "waiting for acronis to start"
             sleep 2
         }else{
             $wait=0
-            write-output "acronis started, continuing job"
+            write-host "acronis started, continuing job"
 
         }
     
@@ -80,7 +80,7 @@ Function Get-newuuid {
         $read=Get-Content $path\token.txt| ConvertFrom-Stringdata
         $url=$read.values[0]
         $token=$read.values[1]
-        Write-Output 'url: ' $url 'token:' $token
+        write-host 'url: ' $url 'token:' $token
     }
     catch{
         Write-Host "An  error occurred reading token.txt, make sure it looks like url=xxx\r\n token=YYY:"
@@ -103,7 +103,7 @@ Function Get-newuuid {
         break
     }
     try{
-        write-output "Starting acronis process..."
+        write-host "Starting acronis process..."
         $exe="$Env:Programfiles\BackupClient\TrayMonitor\MmsMonitor.exe"
         $exe = $exe -replace ' ','` '
         Start-Process -FilePath $exe
@@ -155,35 +155,35 @@ Check-RunAsAdministrator
 
 $mypath = $MyInvocation.MyCommand.Path
 $path= Split-Path $mypath -Parent
-
 $h=hostname
 $exe="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
-$exe = $exe -replace ' ','` '
-$exe="$exe -m dmldump -s mms -vs Msp::Agent::Dto::Configuration"
-$r=Invoke-Expression -Command $exe
+#$exe = $exe -replace ' ','` '
+$params=@('-m', 'dmldump', '-s', 'mms', '-vs', 'Msp::Agent::Dto::Configuration');
+
+$r=& $exe $params 
 
 $tenant = $r[8] -replace "^.*?string',\s'(.*)'\),", '$1'
 $cloud = $r[42] -replace "^.*?string',\s'(.*)'\),", '$1'
-write-output "latest script on https://github.com/simondev65/acronis_autoregister"
-write-output ""
+write-host "latest script on https://github.com/simondev65/acronis_autoregister"
+write-host ""
 if (!$tenant){
-write-output "Acronis not registered yet"
+write-host "Acronis not registered yet"
   
 }else{ 
 
 
 
-write-output "****this Agent is registered to management $cloud  in the tenant $tenant" 
+write-host "****this Agent is registered to management $cloud  in the tenant $tenant" 
 } 
-write-output ""
-write-output "Setting up Acronis Agent. Please dont close this window, it should take a few seconds"
-write-output 'credential if you want to register to acronis, fill token.txt in $path'
+write-host ""
+write-host "Setting up Acronis Agent. Please dont close this window, it should take a few seconds"
+write-host 'credential if you want to register to acronis, fill token.txt in $path'
 
-write-output 'FYI your computername is:' $h
-write-output '*** IF you want to change the hostname you can change it afterwards in windows settings***'
+write-host 'FYI your computername is:' $h
+write-host '*** IF you want to change the hostname you can change it afterwards in windows settings***'
 $choice=""
 $projectType=Get-ProjectType
-#write-output $projectType
+#write-host $projectType
 Read-Host -Prompt "Press Enter to exit"
 break
 
