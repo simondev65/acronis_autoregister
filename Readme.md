@@ -8,7 +8,9 @@ How to use the script :
 1.create a token in your acronis cloud console
 2.download the latest script on the target machine
 3. add your tenant url and token to token.txt on the local machine
-4.laucn as administrator acronis_autoregister.ps1
+4.launch  acronis_autoregister.ps1 (if script)
+    4.1 if you get error : “Running Scripts is Disabled on this System”, run powershell as admin and run Set-ExecutionPolicy -ExecutionPolicy bypass -Scope CurrentUser
+
 5.follow the script prompt. the first line will tell you were your agent is registered currently. if you are unsure do : 1 unregister to clear any existing registration  then relaunch the script and do 2: register.
 
 
