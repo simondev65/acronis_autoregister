@@ -1,4 +1,4 @@
-  
+   
 Function Get-ProjectType {
     $type=Read-Host "
     1 - unregister Acronis agent
@@ -117,10 +117,16 @@ Function Get-newuuid {
     } 
     
     try{
+        #restart mmc to avoid mms error
+        taskkill /IM mmsmonitor.exe /F
         sleep 5
-        write-host "Starting acronis process..."
-        $exe="$Env:Programfiles\BackupClient\TrayMonitor\MmsMonitor.exe"
-        & $exe
+        write-host "Starting acronis `..."
+        
+        $Prog = "$Env:Programfiles\BackupClient\TrayMonitor\MmsMonitor.exe"
+        $Running = Get-Process prog -ErrorAction SilentlyContinue
+        $Start = {([wmiclass]"win32_process").Create($Prog)} 
+        if($Running -eq $null) # evaluating if the program is running
+        {& $Start} # the process is created on this line
         }
     catch {
         Write-Host "An acronis starting service  error occurred:"
@@ -205,5 +211,6 @@ break
 
 
 
+ 
  
  
