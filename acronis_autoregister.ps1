@@ -1,6 +1,24 @@
    
 Function Get-ProjectType {
-    $type=Read-Host "
+    $exe="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
+    #$exe = $exe -replace ' ','` '
+    $params=@('-m', 'dmldump', '-s', 'mms', '-vs', 'Msp::Agent::Dto::Configuration');
+
+    $r=& $exe $params 
+
+    $tenant = $r[8] -replace "^.*?string',\s'(.*)'\),", '$1'
+    $cloud = $r[42] -replace "^.*?string',\s'(.*)'\),", '$1'
+    write-host "latest script on https://github.com/simondev65/acronis_autoregister"
+    write-host ""
+    if (!$tenant){
+        write-host "Acronis not registered yet"
+    }else{ 
+        write-host "****this Agent is registered to management $cloud  in the tenant $tenant" 
+    } 
+    write-host ""
+    write-host 'credential if you want to register to acronis, fill token.txt in $path'
+    write-host '*** IF you want to change the hostname you can change it afterwards in windows settings***'
+        $type=Read-Host "
     1 - unregister Acronis agent
     2 - Register acronis Agent with a new UUID (to avoid duplication)
     3 - Register acronis Agent with current UUID
@@ -178,35 +196,12 @@ Function Check-RunAsAdministrator()
 #Check Script is running with Elevated Privileges
 Check-RunAsAdministrator
 
-
+write-host "latest script on https://github.com/simondev65/acronis_autoregister"
 $mypath = $MyInvocation.MyCommand.Path
 $path= Split-Path $mypath -Parent
 $h=hostname
-$exe="$Env:Programfiles\BackupClient\PyShell\bin\acropsh.exe"
-#$exe = $exe -replace ' ','` '
-$params=@('-m', 'dmldump', '-s', 'mms', '-vs', 'Msp::Agent::Dto::Configuration');
-
-$r=& $exe $params 
-
-$tenant = $r[8] -replace "^.*?string',\s'(.*)'\),", '$1'
-$cloud = $r[42] -replace "^.*?string',\s'(.*)'\),", '$1'
-write-host "latest script on https://github.com/simondev65/acronis_autoregister"
-write-host ""
-if (!$tenant){
-write-host "Acronis not registered yet"
-  
-}else{ 
-
-
-
-write-host "****this Agent is registered to management $cloud  in the tenant $tenant" 
-} 
-write-host ""
-write-host "Setting up Acronis Agent. Please dont close this window, it should take a few seconds"
-write-host 'credential if you want to register to acronis, fill token.txt in $path'
-
 write-host 'FYI your computername is:' $h
-write-host '*** IF you want to change the hostname you can change it afterwards in windows settings***'
+
 $choice=""
 $projectType=Get-ProjectType
 #write-host $projectType
