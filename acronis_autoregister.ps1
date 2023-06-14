@@ -2,13 +2,15 @@
 Function Get-ProjectType {
     $type=Read-Host "
     1 - unregister Acronis agent
-    2 - Register acronis Agent with a new UUID
-    3 - exit
+    2 - Register acronis Agent with a new UUID (to avoid duplication)
+    3 - Register acronis Agent with current UUID
+    4 - exit
     Please choose"
     Switch ($type){
         1 {$choice=Get-unregister}
         2 {$choice=Get-newuuid}
-        3 {break}
+        3 {$choice=Get-register}
+        4 {break}
         Default{break}
     }
     return $choice
@@ -85,6 +87,10 @@ Function Get-newuuid {
         }
     
     }
+    Get-register
+}
+Function Get-register {
+
 #read token from file
     try{
         $read=Get-Content $path\token.txt| ConvertFrom-Stringdata
@@ -204,6 +210,7 @@ write-host '*** IF you want to change the hostname you can change it afterwards 
 $choice=""
 $projectType=Get-ProjectType
 #write-host $projectType
+$projectType=Get-ProjectType
 Read-Host -Prompt "Press Enter to exit"
 break
 
