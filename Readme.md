@@ -1,9 +1,11 @@
 ******ACRONIS cyber protect cloud  registering tool *****
-This Script intends to solve a common use case : <br>
+This Script intends to solve a few common use case : <br>
 1/show you where the machine is currently registered<br>
 2/unregister and register to any tenant with a token<br>
 3/enabling you to clone machine with agents without any issues, and then register to any tenant. It Avoids duplication of UUID, by creating a new UUID.<br>
-
+4/if you have trouble registering your agent to acronis cloud, this script will tell you if the agent is already registered, and by choosing option 2, you will be able to register it with a new unique ID. This will solve any duplicated ID issue if the machine was already registered to another tenant.
+**How do i know i'm running into this duplicated ID issue ?: the logs in c:\programdata\acronis\installationlogs\DATE\boostrapper.log : you will see a log "Agent wit ID XX is already registered in a different tenant"**
+![registered](https://github.com/simondev65/acronis_autoregister/assets/9587627/e2476435-e720-4946-bd32-e4fe0f7347f1)
 
 
 How to use the script : <br>
